@@ -11,7 +11,9 @@ ScaleType = Union[scales._Scale,Literal["Major","Minor","Natural minor","Ionian"
 def get_chord_notes(
         start_note:str
         ,chord_type:str = "maj"
-        ,return_type:Literal["str","music21.note"] = "str") -> Union[List[str],List[music21.note.Note]]:
+        ,return_type:Literal["str","music21.note"] = "str"
+        ) -> Union[List[str],List[music21.note.Note]]:
+    # medium tested
     import musicpy as mp
     import music21.note
     # Create a chord object
@@ -33,6 +35,7 @@ def tranpose_by_key(
     ,to_scale_type: ScaleType = "Major"
     ,return_type:Literal["str","music21.note"] = "str"
 ) -> List[str]:
+    # medium tested
     import music21.note
     # Helper function to get the appropriate scale object
     def get_scale(key: str, scale_type: ScaleType) -> scales._Scale:
@@ -77,6 +80,7 @@ def tranpose_by_interval(
     ,interval:int
     ,return_type:Literal["str","music21.note"] = "str"
 ) -> List[str]:
+    # not done yet
     """
     interval is semi note
     """
