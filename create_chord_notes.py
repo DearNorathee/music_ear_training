@@ -172,22 +172,39 @@ def create_midi_melody(
     prefix_name:str,
     output_folder:Union[str,Path],
     out_keys: List[str] = ALL_KEYS,
-    octaves: List[int] = [1, 2, 3, 4, 5, 6, 7]
+    octaves: List[int] = [1, 2, 3, 4, 5, 6, 7],
+    longer_last_note:int = 4,
+    outname_key_before_octave:bool = True
     ) -> None:
     # medium tested
     # need better name
-    def _create_midi_melody_H1(notes,key,octave):
+    def _create_midi_melody_H1(
+            notes,
+            key,
+            octave, 
+            longer_last_note:int = 4,
+            outname_key_before_octave:bool = True):
+        """
+        outname_key_before_octave if True used to generate filename using key before octave: "Key D_Octave 3"
+            if False "Octave 3_Key D"
+        """
+
         # helper function to generate files using pd.DataFrame
-        curr_out_name = f"{prefix_name}_Octave {octave}_Key {key}.mid"
+        if outname_key_before_octave:
+            curr_out_name = f"{prefix_name}_Key {key}_Octave {octave}.mid"
+        else:
+            curr_out_name = f"{prefix_name}_Octave {octave}_Key {key}.mid"
+
         curr_out_path = Path(str(output_folder)) / curr_out_name
-        mus.create_midi(curr_out_path,notes)
+        note_lengths = [1 for _ in range(len(notes))]
+        note_lengths[-1] = longer_last_note
+        mus.create_midi(curr_out_path,notes,note_lengths=note_lengths)
 
     melody_df = create_melody(notes, in_key, out_keys, octaves)
     melody_df.apply(
-        lambda row: _create_midi_melody_H1(row['Notes'],row['Key'],row['Octave']), axis=1
+        lambda row: _create_midi_melody_H1(row['Notes'],row['Key'],row['Octave'],longer_last_note,outname_key_before_octave), axis=1
     )
 
-    pass
 
 # need better name
 # ---------------------------------------------------------------------------
