@@ -40,5 +40,11 @@ def test_create_midi_melody():
     notes = ["C3", "E3", "G3"]
     create_midi_melody(notes, in_key="C", prefix_name="Triad", output_folder=test_01_triad_folder)
 
-test_create_midi_melody()
-test_create_melody()
+def arpeggio_02_minor_triads():
+    output_folder = r"C:\Users\Heng2020\OneDrive\Desktop\Musical Notes Collection\Listening Practice\Arpeggio\03 Minor Triads Up"
+    notes = ["C3", "Eb3", "G3"]
+    create_midi_melody(notes, in_key="C", prefix_name="Minor Triad", output_folder=output_folder)
+
+arpeggio_02_minor_triads()
+# test_create_midi_melody()
+# test_create_melody()
