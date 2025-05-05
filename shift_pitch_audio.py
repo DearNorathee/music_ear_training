@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Union
 
 def shift_pitch(audio_path: str, output_path: str, semitones: int):
     import librosa
@@ -13,7 +14,7 @@ def shift_pitch(audio_path: str, output_path: str, semitones: int):
     # Save the output
     sf.write(output_path, y_shifted, sr)
 
-def create_audio_all_keys(audio_path: str | Path, output_folder: str, original_key: str = "C"):
+def create_audio_all_keys(audio_path: Union[str , Path], output_folder: str, original_key:str):
     import librosa
     import soundfile as sf
     import os
@@ -41,3 +42,26 @@ def create_audio_all_keys(audio_path: str | Path, output_folder: str, original_k
         # Save file
         out_path = output_folder / f"{key}.wav"
         sf.write(out_path, y_shifted, sr)
+
+# is it possible for me to break it down how to play it in piano?
+from basic_pitch.inference import predict
+from basic_pitch import ICASSP_2022_MODEL_PATH
+from basic_pitch.audio import load_audio
+from basic_pitch.note_creation import notes_to_midi, output_notes_to_midi
+
+audio_path = "piano_audio.wav"
+audio, sr = load_audio(audio_path)
+model_output = predict(audio, sr, model_path=ICASSP_2022_MODEL_PATH)
+
+# Convert to list of notes (start time, end time, pitch)
+notes = model_output["notes"]
+for note in notes:
+    print(f"Pitch: {note[2]}, Start: {note[0]:.2f}s, End: {note[1]:.2f}s")
+
+
+def test_shift_pitch():
+    audio_path01 = r"C:\C_Music\Healing Songs\01 Tears of Gold.mp3"
+    output_path01 = r"C:\C_Video_Python\riff_music\01 Tears of Gold_B.mp3"
+    shift_pitch(audio_path01,output_path01,3)
+
+test_shift_pitch()
